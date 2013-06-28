@@ -47,7 +47,16 @@ end
 models/user.rb:
 
 ```ruby
+class User < ActiveRecord::Base
+  include RememberMe::Model
+end
+```
+
+if mongoid
+
+```ruby
 class User
+  include Mongoid::Document
   include RememberMe::Model
 end
 ```
