@@ -12,9 +12,8 @@ module RememberMe
     end
 
     def forget_me!
-      return if self.remember_created_at.nil?
       self.remember_created_at = nil
-      save(validate: false)
+      save(validate: false) if self.changed?
     end
 
     def remember_expired?
