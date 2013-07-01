@@ -16,7 +16,7 @@ RememberMe
 RememberMe is a simple remember-me login solution on Rails.
 Manages generating and clearing a token for remembering the user from a saved cookie.
 
-<img src="http://www.movieposterdb.com/posters/10_04/2010/1403981/l_1403981_94a56aed.jpg" width="300">
+![remember me](http://blog-imgs-60.fc2.com/k/u/g/kugibera/remember-me-robert.jpg)
 
 Installation
 ------------
