@@ -21,8 +21,11 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.3'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'rspec-rails'
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'coveralls'
+  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'awesome_print'
 
   spec.add_dependency 'rails', '>= 3.2'
   spec.add_dependency 'mongoid', '>= 3'
