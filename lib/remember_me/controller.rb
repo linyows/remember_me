@@ -42,7 +42,10 @@ module RememberMe
 
     def remember(scope)
       cookie = cookies.signed[remember_key(scope)]
-      "#{scope.classify}".constantize.serialize_from_cookie(*cookie) if cookie
+      resource = cookie ?
+        "#{scope.classify}".constantize.serialize_from_cookie(*cookie) : nil
+      yield resource if block_given?
+      resource
     end
   end
 end
