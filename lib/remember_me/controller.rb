@@ -44,8 +44,11 @@ module RememberMe
       cookie = cookies.signed[remember_key(scope)]
       resource = cookie ?
         "#{scope.classify}".constantize.serialize_from_cookie(*cookie) : nil
-      yield resource if block_given?
-      resource
+      if block_given?
+        yield resource
+      else
+        resource
+      end
     end
   end
 end
