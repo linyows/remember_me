@@ -1,3 +1,5 @@
+require 'digest/sha1'
+
 module RememberMe
   module Model
     extend ::ActiveSupport::Concern
