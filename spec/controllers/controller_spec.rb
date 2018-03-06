@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
 end
 
 class SessionsController < ApplicationController
+  def index
+    redirect_to '/home' if user_signed_in?
+  end
+
   def create
     current_user = User.new
     remember_me(current_user) if remember_me?
@@ -38,6 +42,18 @@ end
 
 describe SessionsController, type: :controller do
   let(:remember_me) { true }
+  let(:user) { User.new }
+
+  describe 'GET #index' do
+    before do
+      expect(User).to receive(:where).and_return([user])
+      expect(user).to receive(:remember_expired?).and_return(false)
+      expect(controller).to receive_message_chain(:cookies, :signed, :[]).and_return([user.id, Digest::SHA1.hexdigest(user.id)])
+      get :index
+    end
+
+    it { expect(response.status).to eq 302 }
+  end
 
   describe 'POST #create' do
     before do
