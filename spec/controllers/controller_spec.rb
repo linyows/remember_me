@@ -36,14 +36,6 @@ class SessionsController < ApplicationController
   end
 end
 
-class HomesController < ApplicationController
-  before_action :authenticate_user!
-
-  def index
-    render nothing: true
-  end
-end
-
 describe SessionsController do
   let(:remember_me) { true }
   let(:attrs) { { remember_me: remember_me } }
