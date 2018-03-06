@@ -46,14 +46,25 @@ describe ApplicationController, type: :controller do
   let(:user) { User.new }
 
   describe 'GET #index' do
-    before do
-      expect(User).to receive(:where).and_return([user])
-      expect(user).to receive(:remember_expired?).and_return(false)
-      expect(controller).to receive_message_chain(:cookies, :signed, :[]).and_return([user.id, Digest::SHA1.hexdigest(user.id)])
-      get :index
+    context 'remember' do
+      before do
+        expect(User).to receive(:where).and_return([user])
+        expect(user).to receive(:remember_expired?).and_return(false)
+        expect(controller).to receive_message_chain(:cookies, :signed, :[]).and_return([user.id, Digest::SHA1.hexdigest(user.id)])
+        get :index
+      end
+
+      it { expect(response).to redirect_to('/') }
     end
 
-    it { expect(response).to redirect_to('/') }
+    context 'raise error' do
+      before do
+        expect(controller).to receive_message_chain(:cookies, :signed, :[]).and_raise(NameError)
+        get :index
+      end
+
+      it { expect(response).not_to redirect_to('/') }
+    end
   end
 
   describe 'POST #create' do

@@ -49,6 +49,8 @@ module RememberMe
       else
         resource
       end
+    rescue
+      nil
     end
   end
 end
