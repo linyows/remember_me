@@ -50,6 +50,8 @@ module RememberMe
         resource
       end
     rescue
+      # see: https://github.com/linyows/remember_me/pull/1
+      # `Moped` NameError occured when upgrade mongoid v4 to v5
       nil
     end
   end
