@@ -42,7 +42,7 @@ describe SessionsController, type: :controller do
   describe 'POST #create' do
     before do
       expect(controller).to receive_message_chain(:cookies, :signed, :[]=).and_return('')
-      post :create, { remember_me: remember_me }
+      post :create, params: { remember_me: remember_me }
     end
 
     it { expect(response.status).to eq 302 }
