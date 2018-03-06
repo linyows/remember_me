@@ -36,26 +36,25 @@ class SessionsController < ApplicationController
   end
 end
 
-describe SessionsController do
+describe SessionsController, type: :controller do
   let(:remember_me) { true }
-  let(:attrs) { { remember_me: remember_me } }
 
   describe 'POST #create' do
     before do
-      controller.stub_chain(:cookies, :signed, :[]=) { '' }
-      post :create, attrs
+      expect(controller).to receive_message_chain(:cookies, :signed, :[]=).and_return('')
+      post :create, { remember_me: remember_me }
     end
 
-    it { response.status.should eq 302 }
+    it { expect(response.status).to eq 302 }
   end
 
   describe 'GET #destroy' do
     before do
-      controller.stub(:current_user) { User.new }
-      controller.stub_chain(:cookies, :delete) { nil }
+      expect(controller).to receive(:current_user).and_return(User.new)
+      expect(controller).to receive_message_chain(:cookies, :delete).and_return(nil)
       get :destroy
     end
 
-    it { response.status.should eq 302 }
+    it { expect(response.status).to eq 302 }
   end
 end

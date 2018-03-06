@@ -58,7 +58,7 @@ describe RememberMe::Model do
 
     context 'when not remembered' do
       let(:remember_created_at) { nil }
-      it { expect { @model.remember_expires_at }.to raise_error }
+      it { expect { @model.remember_expires_at }.to raise_error(NoMethodError) }
     end
   end
 
@@ -84,8 +84,8 @@ describe RememberMe::Model do
     let(:remember_token) { @model.rememberable_value }
     let(:expired) { false }
     before do
-      User.stub_chain(:where, :first).and_return(@model)
-      @model.stub(:remember_expired?).and_return(expired)
+      expect(User).to receive_message_chain(:where, :first).and_return(@model)
+      expect(@model).to receive(:remember_expired?).and_return(expired)
     end
     subject { User.serialize_from_cookie(id, remember_token) }
     it { expect(subject).to eq @model }
