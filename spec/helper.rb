@@ -11,6 +11,7 @@ end
 
 require 'rails'
 require 'action_controller'
+require 'action_view'
 require 'active_support/concern'
 require 'active_record'
 require 'mongoid'
