@@ -26,7 +26,6 @@ describe ApplicationController, type: :controller do
   controller do
     def index
       redirect_to '/' and return if user_signed_in?
-      render nothing: true
     end
 
     def create
@@ -59,6 +58,7 @@ describe ApplicationController, type: :controller do
 
     context 'raise error' do
       before do
+        request.env['HTTP_ACCEPT'] = 'anonymous/html'
         expect(controller).to receive_message_chain(:cookies, :signed, :[]).and_raise(NameError)
         get :index
       end
