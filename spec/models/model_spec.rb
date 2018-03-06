@@ -3,15 +3,15 @@ require 'helper'
 describe RememberMe::Model do
   before { @model = User.new }
 
-  it { expect(@model.fields.has_key? 'remember_created_at').to be_true }
+  it { expect(@model.fields.has_key? 'remember_created_at').to be_truthy }
   it { expect(@model.fields['remember_created_at'].options[:type]).to eq Time }
 
-  it { expect(@model.respond_to? :remember_me!).to be_true }
-  it { expect(@model.respond_to? :forget_me!).to be_true }
-  it { expect(@model.respond_to? :remember_expired?).to be_true }
-  it { expect(@model.respond_to? :remember_expires_at).to be_true }
-  it { expect(@model.respond_to? :rememberable_options).to be_true }
-  it { expect(@model.respond_to? :rememberable_value).to be_true }
+  it { expect(@model.respond_to? :remember_me!).to be_truthy }
+  it { expect(@model.respond_to? :forget_me!).to be_truthy }
+  it { expect(@model.respond_to? :remember_expired?).to be_truthy }
+  it { expect(@model.respond_to? :remember_expires_at).to be_truthy }
+  it { expect(@model.respond_to? :rememberable_options).to be_truthy }
+  it { expect(@model.respond_to? :rememberable_value).to be_truthy }
 
   describe '#remember_me!' do
     before { @model.remember_me! }
@@ -33,18 +33,18 @@ describe RememberMe::Model do
     context 'when remembered' do
       context 'if expired' do
         let(:remember_created_at) { Time.now - 2.weeks }
-        it { should be_true }
+        it { should be_truthy }
       end
 
       context 'if not expired' do
         let(:remember_created_at) { Time.now - 2.weeks + 1 }
-        it { should be_false }
+        it { should be_falsey }
       end
     end
 
     context 'when not remembered' do
       let(:remember_created_at) { nil }
-      it { should be_true }
+      it { should be_truthy }
     end
   end
 
@@ -58,7 +58,7 @@ describe RememberMe::Model do
 
     context 'when not remembered' do
       let(:remember_created_at) { nil }
-      it { expect { @model.remember_expires_at }.to raise_error }
+      it { expect { @model.remember_expires_at }.to raise_error(NoMethodError) }
     end
   end
 
@@ -84,8 +84,8 @@ describe RememberMe::Model do
     let(:remember_token) { @model.rememberable_value }
     let(:expired) { false }
     before do
-      User.stub_chain(:where, :first).and_return(@model)
-      @model.stub(:remember_expired?).and_return(expired)
+      expect(User).to receive_message_chain(:where, :first).and_return(@model)
+      expect(@model).to receive(:remember_expired?).and_return(expired)
     end
     subject { User.serialize_from_cookie(id, remember_token) }
     it { expect(subject).to eq @model }
