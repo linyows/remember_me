@@ -33,11 +33,6 @@ end
 Example::Application.config.secret_key_base = SecureRandom.hex(64)
 
 Example::Application.config.session_options = {}
-Example::Application.routes.draw do
-  get 'signin', to: 'sessions#index'
-  post 'signin', to: 'sessions#create'
-  get 'signout', to: 'sessions#destroy'
-end
 
 class User
   include Mongoid::Document

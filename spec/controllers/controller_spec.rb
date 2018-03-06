@@ -22,25 +22,26 @@ class ApplicationController < ActionController::Base
   end
 end
 
-class SessionsController < ApplicationController
-  def index
-    redirect_to '/home' if user_signed_in?
+describe ApplicationController, type: :controller do
+  controller do
+    def index
+      redirect_to '/' and return if user_signed_in?
+      render nothing: true
+    end
+
+    def create
+      current_user = User.new
+      remember_me(current_user) if remember_me?
+      redirect_to '/'
+    end
+
+    def destroy
+      forget_me(current_user)
+      self.current_user = nil
+      redirect_to '/signin'
+    end
   end
 
-  def create
-    current_user = User.new
-    remember_me(current_user) if remember_me?
-    redirect_to '/'
-  end
-
-  def destroy
-    forget_me(current_user)
-    self.current_user = nil
-    redirect_to '/signin'
-  end
-end
-
-describe SessionsController, type: :controller do
   let(:remember_me) { true }
   let(:user) { User.new }
 
@@ -52,7 +53,7 @@ describe SessionsController, type: :controller do
       get :index
     end
 
-    it { expect(response.status).to eq 302 }
+    it { expect(response).to redirect_to('/') }
   end
 
   describe 'POST #create' do
@@ -61,14 +62,14 @@ describe SessionsController, type: :controller do
       post :create, params: { remember_me: remember_me }
     end
 
-    it { expect(response.status).to eq 302 }
+    it { expect(response).to redirect_to('/') }
   end
 
   describe 'GET #destroy' do
     before do
       expect(controller).to receive(:current_user).and_return(User.new)
       expect(controller).to receive_message_chain(:cookies, :delete).and_return(nil)
-      get :destroy
+      delete :destroy, params: {id: user.id}
     end
 
     it { expect(response.status).to eq 302 }
