@@ -17,15 +17,20 @@ require 'mongoid'
 require 'remember_me'
 require 'rspec'
 require 'rspec/rails'
+require 'securerandom'
 
 RSpec.configure do |config|
   config.mock_with :rspec
+  config.infer_base_class_for_anonymous_controllers = true
 end
 
 module Example
   class Application < Rails::Application
   end
 end
+
+# for secret_key_base
+Example::Application.config.secret_key_base = SecureRandom.hex(64)
 
 Example::Application.routes.draw do
   post 'signin', to: 'sessions#create'
